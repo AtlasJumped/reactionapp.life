@@ -97,8 +97,11 @@ textarea.inp{min-height:84px;resize:vertical}
   .nav button{flex:none;flex-direction:row;gap:.7rem;justify-content:flex-start;padding:.5rem .8rem;font-size:.95rem}
   .main{padding-bottom:40px}
   .screen{padding:28px 28px 24px}
-  body.has-dock .dp-btn{bottom:max(12px,env(safe-area-inset-bottom))}
 }
 @media(max-width:760px){.plats,.wall{grid-template-columns:1fr 1fr}.modes{grid-template-columns:1fr}}
 @media(max-width:560px){.pair{grid-template-columns:1fr}.plats,.wall{grid-template-columns:1fr}.btn{width:100%}.stack .btn.small{width:auto}.mlist .btn{width:auto}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* the shared HMR dock sits above the bottom tab bar on phones */
+body.has-dock{--hmr-lift:68px}
+@media(min-width:900px){body.has-dock{--hmr-lift:0px}}

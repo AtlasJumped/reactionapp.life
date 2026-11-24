@@ -130,9 +130,9 @@
       } else done(fallbackCopy(text));
     });
 
-    function open() { panel.hidden = false; btn.hidden = true; btn.setAttribute('aria-expanded', 'true'); refresh(); x.focus(); }
-    function close() { panel.hidden = true; btn.hidden = false; btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
-    btn.addEventListener('click', open);
+    function open() { panel.hidden = false; btn.setAttribute('aria-expanded', 'true'); refresh(); x.focus(); }
+    function close() { panel.hidden = true; btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
+    btn.addEventListener('click', function () { if (panel.hidden) open(); else close(); });
     x.addEventListener('click', close);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); });
     document.body.appendChild(btn);
