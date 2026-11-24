@@ -8,7 +8,7 @@
     { id: 4, name: 'Sunset', note: 'Soft warm gradients, rounded shapes, no hard outlines.' },
     { id: 5, name: 'Paper', note: 'Editorial. Warm paper, serif headings, thin black rules.' }
   ];
-  var LEVELS = ['Strong dislike', 'Dislike', 'Like', 'Strong like'];
+  var LEVELS = ['Strong like', 'Like', 'Dislike', 'Strong dislike'];
   var KD = 'reactionapp.design', KR = 'reactionapp.ratings.v1';
 
   function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
