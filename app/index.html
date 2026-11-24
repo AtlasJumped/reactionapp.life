@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Reaction App prototype</title>
+<meta name="description" content="Record a session of what you watch and your reaction, then keep a highlight reel of your strongest moments. Prototype. Nothing is uploaded.">
+<meta name="theme-color" content="#fff7e6">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="../designs.css">
+<link rel="stylesheet" href="app.css">
+<script src="../designs.js"></script>
+</head><body class="has-dock">
+<a class="skip" href="#main">Skip to content</a>
+<div class="app" id="app">
+  <nav class="nav" id="nav" aria-label="Main">
+    <a class="brand" href="../" aria-label="Reaction App website"><img src="icons/icon-192.png" width="32" height="32" alt=""><span>Reaction App</span></a>
+    <button type="button" data-go="connect" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span>Connect</span></button>
+    <button type="button" data-go="record"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h12v10H3zM15 11l6-4v10l-6-4"/></svg><span>Record</span></button>
+    <button type="button" data-go="wall"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.5 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg><span>Wall</span></button>
+    <button type="button" data-go="leaders"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20V11h4v9M13 20V5h4v15M3 20h18"/></svg><span>Leaders</span></button>
+    <button type="button" data-go="inbox"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13l3-8h12l3 8v6H3zM3 13h5l1 2h6l1-2h5"/></svg><span>Messages</span></button>
+    <button type="button" data-go="me"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.5 3.5-7 8-7s8 2.5 8 7"/></svg><span>Me</span></button>
+  </nav>
+
+  <main id="main" class="main" tabindex="-1">
+
+    <section class="screen on" id="s-connect" aria-labelledby="h-connect">
+      <div class="top"><h1 id="h-connect">Connect your accounts</h1></div>
+      <p class="lead">Watch where you already watch. Open a platform below in a new tab, sign in the usual way, then record a session.</p>
+      <div class="info"><b>Honest note:</b> a web page cannot log in to these apps for you, so there is no sign in button here. Each button opens the official site in a new tab and marks it "opened" on this device only.</div>
+      <ul class="plats" id="plats" aria-label="Platforms"></ul>
+      <div class="stack"><button type="button" class="btn big" data-go="record">Start a recording session</button></div>
+      <h2>Or send a video to a friend</h2>
+      <p class="fine">Pick a video from your device and send your friend a link. Delivering the video and getting their reaction back needs a server that we have not built yet <span class="tag">Planned</span>. Today you can record your own reaction to a video, and share the link with a friend so they can try it too.</p>
+      <div class="stack"><button type="button" class="btn ghost" id="goFile">Record my reaction to a video</button></div>
+    </section>
+
+    <section class="screen" id="s-record" aria-labelledby="h-record">
+      <div class="top"><h1 id="h-record">Record a session</h1></div>
+      <div id="recSetup">
+        <p class="lead">Choose how to record. A session runs 5 minutes. When time is up, we never cut you off.</p>
+        <div class="modes" role="group" aria-label="Recording mode">
+          <button type="button" class="mode" id="modeScreen" aria-pressed="false"><b>Screen and camera</b><span>Desktop. Record a tab, window, or screen together with your camera.</span></button>
+          <button type="button" class="mode" id="modeFile" aria-pressed="false"><b>Camera and a video from your device</b><span>Phone or desktop. Pick a video, watch it, and record your reaction.</span></button>
+        </div>
+        <p class="info" id="capMsg" role="status"></p>
+        <div id="filePick" hidden>
+          <label class="lbl" for="fileIn">Choose a video from your device</label>
+          <input id="fileIn" class="inp" type="file" accept="video/*">
+          <p class="fine" id="fileMsg" role="status"></p>
+        </div>
+        <ul class="notice" aria-label="Before you start">
+          <li><b>When you press Start,</b> your browser asks to use your camera, and in screen mode to share a screen, tab, or window.</li>
+          <li><b>Pick what to share.</b> In screen mode, choose the tab or window with the video app you opened, then switch to it.</li>
+          <li><b>Nothing is uploaded.</b> Recordings stay on this device until you save or share them.</li>
+          <li><b>You can stop</b> at any time with the Done button.</li>
+        </ul>
+        <div class="stack"><button type="button" class="btn big" id="btnStart">Start recording</button></div>
+        <p class="err" id="recErr" role="alert" hidden></p>
+      </div>
+      <div id="recLive" hidden>
+        <div class="recbar"><span class="dot" aria-hidden="true"></span><span class="timer" id="timer" role="timer" aria-live="off">5:00</span><span id="recStatus" role="status">Recording</span></div>
+        <p class="timeup" id="timeUp" role="alert" hidden>Time is up. Finish what you are watching, then press Done.</p>
+        <div class="pair" id="livePair">
+          <div class="vbox"><video id="vLive1" muted playsinline autoplay></video><span class="lab" id="lab1">What you watch</span><span class="none" id="none1" hidden></span></div>
+          <div class="vbox"><video id="vLive2" muted playsinline autoplay></video><span class="lab">You</span></div>
+        </div>
+        <div class="stack"><button type="button" class="btn big" id="btnDone">Done</button><button type="button" class="btn ghost" id="btnDiscard">Discard session</button></div>
+        <p class="fine" id="liveNote"></p>
+      </div>
+    </section>
+
+    <section class="screen" id="s-reel" aria-labelledby="h-reel">
+      <div class="top"><h1 id="h-reel">Your highlight reel</h1><span class="tag">Prototype</span></div>
+      <div id="reelBusy" hidden><p id="busyMsg" role="status">Looking for your strongest reactions...</p><div class="prog"><i id="busyBar"></i></div></div>
+      <div id="reelNone" class="info" hidden>No recording yet. <button type="button" class="btn small" data-go="record">Record a session</button></div>
+      <div id="reelMain" hidden>
+        <div class="stack"><button type="button" class="btn ghost small" id="btnLayout" aria-pressed="false">Show clip above reaction (friend's desktop view)</button></div>
+        <div class="pair" id="reelPair">
+          <div class="vbox"><video id="vR1" playsinline controls></video><span class="lab" id="rlab1">What you watched</span></div>
+          <div class="vbox"><video id="vR2" playsinline muted controls></video><span class="lab">Your reaction</span></div>
+        </div>
+        <h2>Moments</h2>
+        <p class="fine" id="momSum"></p>
+        <ul class="mlist" id="mlist"></ul>
+        <div class="stack"><button type="button" class="btn small ghost" id="btnPlaySel">Play selected moments</button><button type="button" class="btn small ghost" id="btnAddMom">Add a moment at the current time</button></div>
+        <p class="info">This is a simple prototype. It measures movement on your camera about 4 times a second, so a head turn or a lighting change can look like a reaction. A smarter reaction model will run on our own computer later.</p>
+        <h2>Finish</h2>
+        <div class="opts" id="finOpts">
+          <label><input type="checkbox" id="optWall" checked><span><b>Post to the community wall</b><span>Demo: posts a note on this device only. No video leaves your device.</span></span></label>
+          <label><input type="checkbox" id="optSave" checked><span><b>Save to your computer</b><span>Downloads the recorded video file or files, plus a list of your chosen moments.</span></span></label>
+          <label><input type="checkbox" id="optSend" checked><span><b>Send to a friend</b><span>Opens your share sheet if your device has one. Otherwise copies a message with the link. The video itself is not delivered, because that needs a server.</span></span></label>
+        </div>
+        <div class="stack"><button type="button" class="btn big" id="btnFinish">Finish</button><button type="button" class="btn ghost" data-go="record">Record another</button></div>
+        <p class="fine" id="finMsg" role="status"></p>
+      </div>
+    </section>
+
+    <section class="screen" id="s-wall" aria-labelledby="h-wall">
+      <div class="top"><h1 id="h-wall">Community wall</h1><span class="tag">Demo</span></div>
+      <p class="lead">A public board of reactions that people choose to share. This screen is a demo. It shows example placeholders and what you post from this device.</p>
+      <div class="chips" id="wallChips" role="group" aria-label="Sort the wall"></div>
+      <p class="fine" id="wallNote" role="status">Sorting works once real reactions exist.</p>
+      <div class="wall" id="wallList" aria-label="Reactions"></div>
+    </section>
+
+    <section class="screen" id="s-leaders" aria-labelledby="h-leaders">
+      <div class="top"><h1 id="h-leaders">Leaders wall</h1><span class="tag">Demo</span></div>
+      <p class="lead">Which reactions people watch and react to the most. No real people or numbers exist yet.</p>
+      <h2>Most watched reactions</h2>
+      <ul class="rows"><li><span>Example reaction 1</span><span>n/a</span></li><li><span>Example reaction 2</span><span>n/a</span></li><li><span>Example reaction 3</span><span>n/a</span></li></ul>
+      <h2>Most reacted-to</h2>
+      <ul class="rows"><li><span>Example reaction 1</span><span>n/a</span></li><li><span>Example reaction 2</span><span>n/a</span></li></ul>
+    </section>
+
+    <section class="screen" id="s-inbox" aria-labelledby="h-inbox">
+      <div class="top"><h1 id="h-inbox">Messages</h1><span class="tag">Demo</span></div>
+      <p class="lead">Messages stay on this device in the prototype. Real messages between people need a server.</p>
+      <label class="lbl" for="msgIn">Write a note to yourself</label>
+      <textarea id="msgIn" class="inp" maxlength="500"></textarea>
+      <div class="stack"><button type="button" class="btn small" id="msgAdd">Save note</button></div>
+      <ul class="msgs" id="msgList"></ul>
+      <p class="fine" id="msgEmpty">No notes yet.</p>
+    </section>
+
+    <section class="screen" id="s-me" aria-labelledby="h-me">
+      <div class="top"><h1 id="h-me">Profile</h1><span class="tag">Demo</span></div>
+      <label class="lbl" for="nameIn">Display name</label>
+      <input id="nameIn" class="inp" type="text" maxlength="40" autocomplete="off">
+      <p class="fine">Saved on this device only.</p>
+      <div class="card"><h2>On this device</h2><p id="meStats"></p></div>
+      <div class="card"><h2>Free <span class="tag">Planned</span></h2><p>100% free; first 100 members get generous video storage; delete videos if you hit the limit.</p><p class="fine">This is the plan. It is not live yet, because storage needs a server.</p></div>
+      <div class="card"><h2>For grandparents</h2><p>Tell your grandkids to try it.</p></div>
+      <div class="stack"><button type="button" class="btn ghost small" id="btnCopyLink">Copy a link to share</button><button type="button" class="btn ghost small" id="btnClear">Clear data on this device</button></div>
+      <p class="fine" id="meMsg" role="status"></p>
+    </section>
+
+  </main>
+</div>
+<script src="app.js"></script>
+</body></html>
