@@ -1,4 +1,4 @@
-/* HMR dash v1.2: the HMR family experience dashboard, opened by the round HMR button in the center of the shared bottom bar (hmr-dock.js v6.5+).
+/* HMR dash v1.3: the HMR family experience dashboard, opened by the round HMR button in the center of the shared bottom bar (hmr-dock.js v6.5+).
    One file, copied next to hmr-dock.js on every HMR site, lazy-loaded the first time the HMR button is pressed (or at boot when a visitor has a saved look).
    Layers:
      Home      intro card (with "Don't show this again", explained), row "Right now" (Share, Top with a way back, Bigger text, Night),
@@ -16,7 +16,7 @@
 (function () {
   'use strict';
   if (window.HMRDash && window.HMRDash.version >= 1) return;
-  var doc = document, root = doc.documentElement, VERSION = 1.2;
+  var doc = document, root = doc.documentElement, VERSION = 1.3;
   var SKIN_URL = 'https://hmrfamily.life/hmr-kit/skin.json';
   var KEY = 'hmr-studio-v1', INTRO_KEY = 'hmr-dash-intro-off', SKIN_CACHE = 'hmr-skin-v1';
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -85,7 +85,14 @@
     root.classList.remove('hmr-pal'); root.removeAttribute('data-hmr-pal'); cssVar('pal', '');
   }
   var EXCL = '[data-hmr-ui],#hmr-dock,.hmr-dock,svg,[class^="hmr-"],[class*=" hmr-"]';
-  function skip(e) { return SKIPTAG[e.tagName] || ours(e) || (e.closest && e.closest(EXCL)); }
+  // an element is ours (or inside our UI) only up to <body>: <html> and <body> carry hmr- state classes (hmr-pal and the dock's), which must not mark the whole page as ours
+  var skipC = new WeakMap();
+  function uiUp(n) {
+    if (!n || n === doc.body || n === root || n.nodeType !== 1) return false;
+    var v = skipC.get(n); if (v !== undefined) return v;
+    v = !!(ours(n) || (n.matches && n.matches(EXCL)) || uiUp(n.parentElement)); skipC.set(n, v); return v;
+  }
+  function skip(e) { return SKIPTAG[e.tagName] || uiUp(e); }
   function opaqueGrad(g) {   // a gradient made only of solid colors; see-through overlays (on photos) are left alone
     if (!/gradient\(/.test(g) || /url\(|transparent/.test(g)) return false;
     var m = g.match(/rgba?\([^)]*\)/g) || []; if (!m.length) return false;
