@@ -427,7 +427,18 @@
       var pb = document.createElement('button'); pb.type = 'button'; pb.className = 'btn small ghost'; pb.textContent = 'Play';
       pb.setAttribute('aria-label', 'Play moment: ' + m.label);
       pb.addEventListener('click', function () { playWindow(m); });
-      li.appendChild(lab); li.appendChild(pb); ul.appendChild(li);
+      // Label each moment with how it felt ("You laughed at 1:23"). Detection is motion only, so you pick the feeling.
+      var fs = document.createElement('select'); fs.className = 'feel';
+      fs.setAttribute('aria-label', 'How it felt at ' + mmss(m.t));
+      [['', 'How did it feel?'], ['You laughed', 'You laughed'], ['You smiled', 'You smiled'], ['You were shocked', 'You were shocked'], ['You were disgusted', 'You were disgusted'], ['You got angry', 'You got angry'], ['You were touched', 'You were touched']].forEach(function (o) {
+        var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; if (m.feel === o[0]) op.selected = true; fs.appendChild(op);
+      });
+      fs.addEventListener('change', function () {
+        if (!m.base) m.base = m.label;
+        m.feel = fs.value; m.label = fs.value ? fs.value + ' at ' + mmss(m.t) : m.base;
+        span.firstChild.nodeValue = m.label; pb.setAttribute('aria-label', 'Play moment: ' + m.label);
+      });
+      li.appendChild(lab); li.appendChild(fs); li.appendChild(pb); ul.appendChild(li);
     });
     sumMoments();
   }

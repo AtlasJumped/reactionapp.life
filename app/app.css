@@ -72,6 +72,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .mlist label{display:flex;align-items:center;gap:.6rem;flex:1;min-width:10rem;font-weight:700;cursor:pointer;min-height:44px}
 .mlist input[type=checkbox],.opts input[type=checkbox]{width:22px;height:22px;accent-color:var(--acc);flex:none}
 .mlist small{color:var(--mut);font-weight:600}
+.mlist .feel{min-height:44px;border:var(--bw) solid var(--line);border-radius:var(--rs);background:var(--card);color:var(--ink);font:inherit;font-size:16px;padding:.2rem .5rem;max-width:100%}
 .opts{display:grid;gap:.6rem;margin:.8rem 0}
 .opts label{display:flex;align-items:flex-start;gap:.7rem;background:var(--card);border:var(--bw) solid var(--line);border-radius:var(--rs);padding:.7rem .9rem;cursor:pointer;min-height:48px}
 .opts b{display:block}.opts span{font-size:.86rem;color:var(--mut)}
@@ -100,6 +101,8 @@ textarea.inp{min-height:84px;resize:vertical}
 }
 @media(max-width:760px){.plats,.wall{grid-template-columns:1fr 1fr}.modes{grid-template-columns:1fr}}
 @media(max-width:560px){.pair{grid-template-columns:1fr}.plats,.wall{grid-template-columns:1fr}.btn{width:100%}.stack .btn.small{width:auto}.mlist .btn{width:auto}}
+/* Phones held upright: square videos, each about half the screen (clip above, your face below) */
+@media(max-width:560px) and (orientation:portrait){.pair .vbox,.pair.stack1 .vbox{aspect-ratio:1/1;width:min(100%,46vh);width:min(100%,46svh);margin:0 auto}.pair{gap:.5rem}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* the shared HMR dock sits above the bottom tab bar on phones */
