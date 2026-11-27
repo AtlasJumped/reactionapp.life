@@ -88,12 +88,12 @@
     });
 
     var foot = el('div', { class: 'dp-foot' });
-    var copy = el('button', { class: 'dp-copy', type: 'button' }, 'Copy all ratings');
+    var copy = el('button', { class: 'dp-copy', type: 'button' }, 'Submit');
     var msg = el('span', { class: 'dp-msg', role: 'status' });
     foot.appendChild(copy); foot.appendChild(msg);
     panel.appendChild(foot);
 
-    function save() { if (!lsSet(KR, JSON.stringify(ratings))) msg.textContent = 'Could not save in this browser. Use Copy all ratings.'; }
+    function save() { if (!lsSet(KR, JSON.stringify(ratings))) msg.textContent = 'Could not save in this browser. Use Submit to send your ratings now.'; }
     function refresh() {
       DESIGNS.forEach(function (d) {
         var it = items[d.id], r = ratings[d.id] || {};
@@ -122,7 +122,9 @@
       document.body.removeChild(t);
       return ok;
     }
+    function hmrSubmit(b, txt) { var D = window.HMRDock; if (!D || !D.submitBox || !b.parentNode) return false; var bx = D.submitBox({ text: txt, kind: 'design ratings' }); b.parentNode.insertBefore(bx, b.nextSibling); b.hidden = true; return true; }   // Submit with my email / Submit anonymously (the shared dock)
     copy.addEventListener('click', function () {
+      if (hmrSubmit(copy, summary)) return;
       var text = summary();
       function done(ok) { msg.textContent = ok ? 'Copied.' : 'Copy failed. Select and copy this text: ' + text.split('\n')[0]; }
       if (navigator.clipboard && navigator.clipboard.writeText) {
